@@ -95,4 +95,35 @@ $(document).ready(function () {
         $("#filter_type_field").val(filter_type)
     }
     $(".app-footer").hide()
+
+    $("#pending-tbody").on("click", ".delete", function(){
+        delete_id = $(this).attr("delete_id");
+    })
+    $(".bulk-delete").on("click", function(){
+        if(bulk_delete_array.length > 0){
+            $('#bulk_delete_modal').modal('toggle');
+        } else {
+            toastr.warning("You haven't selected anything to delete")
+        }
+    })
+    $("input[check_type='all']").on("click", function(){
+        var all_checked = this.checked
+        bulk_delete_array = []
+        if(all_checked) {
+            $(".table-row").find("input[type='checkbox']").prop('checked', true)
+            $(".table-row").find("input[type='checkbox']").each(function () {
+                bulk_delete_array.push($(this).attr("check_type"))
+            });
+        } else {
+            $(".table-row").find("input[type='checkbox']").prop('checked', false)
+        }
+    })    
+    $("#pending-tbody").on("click", "input[type='checkbox']", function(){
+        var selected_id = parseInt($(this).attr("check_type"))
+        if(this.checked) {
+            bulk_delete_array.push(parseInt(selected_id))
+        } else {
+            bulk_delete_array.splice(bulk_delete_array.indexOf(selected_id), 1);
+        }
+    })
 });

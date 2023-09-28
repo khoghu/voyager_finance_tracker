@@ -98,13 +98,13 @@ class StaticExpenseController extends \TCG\Voyager\Http\Controllers\VoyagerBread
             }
         }
 
-        $newStaticIncome = StaticExpense::create($new->toArray());
+        $newStaticExpense = StaticExpense::create($new->toArray());
 
-        $newStaticIncome->load("group");
+        $newStaticExpense->load("group");
 
-        $newStaticIncome->debited_at = $newStaticIncome->debited_at ? Carbon::create($newStaticIncome->debited_at)->addHour(8)->format('Y-m-d H:i:s') : null;
+        $newStaticExpense->debited_at = $newStaticExpense->debited_at ? Carbon::create($newStaticExpense->debited_at)->addHour(8)->format('Y-m-d H:i:s') : null;
         
-        return response()->json(["success"=>true,"message"=> $newStaticIncome]);   
+        return response()->json(["success"=>true,"message"=> $newStaticExpense]);   
     }
 
     public function ajax_edit(Request $request)
@@ -119,15 +119,15 @@ class StaticExpenseController extends \TCG\Voyager\Http\Controllers\VoyagerBread
             }
         }
 
-        $updateStaticIncome = StaticExpense::where("id", $request->id)->first();
+        $updateStaticExpense = StaticExpense::where("id", $request->id)->first();
 
-        $updateStaticIncome->update($update->toArray());
+        $updateStaticExpense->update($update->toArray());
 
-        $updateStaticIncome->load("group");
+        $updateStaticExpense->load("group");
 
-        $updateStaticIncome->debited_at = $updateStaticIncome->debited_at ? Carbon::create($updateStaticIncome->debited_at)->addHour(8)->format('Y-m-d H:i:s') : null;
+        $updateStaticExpense->debited_at = $updateStaticExpense->debited_at ? Carbon::create($updateStaticExpense->debited_at)->addHour(8)->format('Y-m-d H:i:s') : null;
         
-        return response()->json(["success"=>true,"message"=>$updateStaticIncome]);   
+        return response()->json(["success"=>true,"message"=>$updateStaticExpense]);   
     }
 
     public function ajax_delete(Request $request){
@@ -136,9 +136,9 @@ class StaticExpenseController extends \TCG\Voyager\Http\Controllers\VoyagerBread
 
         if($delete_id){
 
-            $staticIncome = StaticExpense::where("id", $delete_id)->first();
+            $StaticExpense = StaticExpense::where("id", $delete_id)->first();
 
-            $staticIncome->delete();
+            $StaticExpense->delete();
 
             return response()->json(["success"=>true,"message"=>"Successfully deleted static expense"]);  
 

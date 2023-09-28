@@ -69,7 +69,7 @@
                                 </thead>
                                 <tbody id="pending-tbody">
                                      @foreach($requests as $request)
-                                        <tr class="expense-row" row_id="{{$request->id}}">
+                                        <tr class="table-row" row_id="{{$request->id}}">
                                             <td><input type="checkbox" check_type="{{$request->id}}"></td>
                                             <td class="id">{{ $request->id }}</td>
                                             <td class="group_id" group_id="{{$request->group_id}}">{{ $request->group->name }}</td>
@@ -138,16 +138,6 @@
             $(".add").on("click", function(){
                 $(".new-expense")[0].reset()
             })
-            $("#pending-tbody").on("click", ".delete", function(){
-                delete_id = $(this).attr("delete_id");
-            })
-            $(".bulk-delete").on("click", function(){
-                if(bulk_delete_array.length > 0){
-                    $('#bulk_delete_modal').modal('toggle');
-                } else {
-                    toastr.warning("You haven't selected anything to delete")
-                }
-            })
             $("#pending-tbody").on("click", ".edit", function(){
                 var tbody_row = $("tr[row_id='"+ $(this).attr("edit_id") +"']")
                 tbody_row.find('td').each(function(index) {
@@ -166,26 +156,6 @@
                     }
                 })
                 $('#editExpenseModal').modal('toggle');
-            })
-            $("input[check_type='all']").on("click", function(){
-                var all_checked = this.checked
-                bulk_delete_array = []
-                if(all_checked) {
-                    $(".artist-row").find("input[type='checkbox']").prop('checked', true)
-                    $(".artist-row").find("input[type='checkbox']").each(function () {
-                        bulk_delete_array.push($(this).attr("check_type"))
-                    });
-                } else {
-                    $(".artist-row").find("input[type='checkbox']").prop('checked', false)
-                }
-            })    
-            $("#pending-tbody").on("click", "input[type='checkbox']", function(){
-                var artist_id = parseInt($(this).attr("check_type"))
-                if(this.checked) {
-                    bulk_delete_array.push(parseInt(artist_id))
-                } else {
-                    bulk_delete_array.splice(bulk_delete_array.indexOf(artist_id), 1);
-                }
             })
             
             $(".new-expense").on("submit",add_expense);
@@ -208,7 +178,7 @@
                     // console.log("pass");
                     // console.log(data);
                     if(data.success) {
-                        $("#pending-tbody").prepend('<tr class="expense-row" row_id="'+ data.message.id +'">')
+                        $("#pending-tbody").prepend('<tr class="table-row" row_id="'+ data.message.id +'">')
                         var tbody_row = $("tr[row_id='"+ data.message.id +"']")
                         tbody_row.append('<td><input type="checkbox" check_type="'+ data.message.id +'"></td>')
                         tbody_row.append('<td class="id">'+ data.message.id +'</td>')
