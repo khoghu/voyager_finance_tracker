@@ -1,6 +1,6 @@
 @extends('voyager::master')
 
-@section('page_title', 'Static Incomes')
+@section('page_title', 'Static Expenses')
 
 @section('page_header')
     <div class="container-fluid">
@@ -8,7 +8,7 @@
             <i class="{{ $dataType->icon }}"></i> {{ $dataType->getTranslatedAttribute('display_name_plural') }}
         </h1>
         @can('add', app($dataType->model_name))
-            <a data-toggle="modal" data-target="#newStaticIncomeModal" class="btn btn-success add btn-add-new">
+            <a data-toggle="modal" data-target="#newStaticExpenseModal" class="btn btn-success add btn-add-new">
                 <i class="voyager-plus"></i> <span>{{ __('voyager::generic.add_new') }}</span>
             </a>
         @endcan
@@ -48,7 +48,7 @@
                                 <option value="title">Title</option>
                                 <option value="description">Description</option>
                                 <option value="amount">Amount</option>
-                                <option value="debit_day_per_month">Debit Day Per Month</option>
+                                <option value="credit_day_per_month">Credit Day Per Month</option>
                             </select>
                         </div>
                         <div class="table-responsive">
@@ -61,7 +61,7 @@
                                        <th>Title</th>
                                        <th>Description</th>
                                        <th>Amount</th>
-                                       <th>Debit Day Per Month</th>
+                                       <th>Credit Day Per Month</th>
                                        <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -74,7 +74,7 @@
                                             <td class="title">{{ $request->title }}</td>
                                             <td class="description">{{ $request->description }}</td>
                                             <td class="amount" amount="{{ $request->amount }}">RM {{ $request->amount }}</td>
-                                            <td class="debit_day_per_month">{{ $request->debit_day_per_month }}</td>
+                                            <td class="credit_day_per_month">{{ $request->credit_day_per_month }}</td>
                                             <td>
                                                 <div class="table-actions-btn">
                                                     <div class="edit" edit_id="{{$request->id}}"><i class="voyager-edit"></i>Edit</div>
@@ -101,7 +101,7 @@
         </div>
     </div>
 
-    @include('voyager.static-income.staticIncomeModals')
+    @include('voyager.static-expense.staticExpenseModals')
     
 @stop
 
@@ -121,36 +121,36 @@
         var delete_id;
         $(document).ready(function () {
             $("#sort_field").on("change", function(){
-                reroute(api("static-incomes?sort="+$(this).val()));
+                reroute(api("static-expenses?sort="+$(this).val()));
             })
             $(".add").on("click", function(){
-                $(".new-static-income")[0].reset()
+                $(".new-static-expense")[0].reset()
             })
             $("#pending-tbody").on("click", ".edit", function(){
                 var tbody_row = $("tr[row_id='"+ $(this).attr("edit_id") +"']")
                 tbody_row.find('td').each(function(index) {
                     if($(this).attr('class') == 'group_id'){
-                        $("#editStaticIncomeModal").find("select[name='"+$(this).attr('class')+"']").val($(this).attr('group_id'));
+                        $("#editStaticExpenseModal").find("select[name='"+$(this).attr('class')+"']").val($(this).attr('group_id'));
                     } else if($(this).attr('class') == 'amount'){
-                        $("#editStaticIncomeModal").find("input[name='"+$(this).attr('class')+"']").val($(this).attr('amount'));
+                        $("#editStaticExpenseModal").find("input[name='"+$(this).attr('class')+"']").val($(this).attr('amount'));
                     } else if (index != 0 && index != 7) {
-                        $("#editStaticIncomeModal").find("input[name='"+$(this).attr('class')+"']").val($(this).text());
+                        $("#editStaticExpenseModal").find("input[name='"+$(this).attr('class')+"']").val($(this).text());
                     }
                 })
-                $('#editStaticIncomeModal').modal('toggle');
+                $('#editStaticExpenseModal').modal('toggle');
             })
             
-            $(".new-static-income").on("submit",add_static_income);
-            $(".update-static-income").on("submit", update_static_income);
-            $(".delete_confirm").on("click", function() { delete_record('static-incomes', delete_id) })
-            $(".bulk_delete_confirm").on("click", function() { delete_bulk_records('static-incomes', bulk_delete_array) })
+            $(".new-static-expense").on("submit",add_static_expense);
+            $(".update-static-expense").on("submit", update_static_expense);
+            $(".delete_confirm").on("click", function() { delete_record('static-expenses', delete_id) })
+            $(".bulk_delete_confirm").on("click", function() { delete_bulk_records('static-expenses', bulk_delete_array) })
         });
 
         //add new record
-        function add_static_income(e){
+        function add_static_expense(e){
             e.preventDefault();
             $.ajax({
-                url:api("static-incomes/ajax_add"),
+                url:api("static-expenses/ajax_add"),
                 type:"POST",
                 dataType: "JSON",
                 data: new FormData(this),
@@ -168,13 +168,13 @@
                         tbody_row.append('<td class="title">'+ data.message.title +'</td>')
                         tbody_row.append('<td class="description">'+ data.message.description +'</td>')
                         tbody_row.append('<td class="amount" amount="'+ data.message.amount +'">RM '+ data.message.amount +'</td>')
-                        tbody_row.append('<td class="debit_day_per_month">'+ data.message.debit_day_per_month +'</td>')
+                        tbody_row.append('<td class="credit_day_per_month">'+ data.message.credit_day_per_month +'</td>')
                         tbody_row.append('<td><div class="table-actions-btn"></div></td>')
                         tbody_row.find(".table-actions-btn").append('<div class="edit" edit_id="'+ data.message.id +'"><i class="voyager-edit"></i>Edit</div>')
                         tbody_row.find(".table-actions-btn").append('<div class="delete" delete_id="'+ data.message.id +'" data-toggle="modal" data-target="#delete_modal"><i class="voyager-trash"></i>Delete</div> ')
                         toastr.success("Added Successfully.");
-                        $('#newStaticIncomeModal').modal('toggle');
-                        $('.new-static-income')[0].reset()
+                        $('#newStaticExpenseModal').modal('toggle');
+                        $('.new-static-expense')[0].reset()
                     }
                 },
                 error:function(error){
@@ -187,10 +187,10 @@
         }
 
         //edit record
-        function update_static_income(e){
+        function update_static_expense(e){
             e.preventDefault();
             $.ajax({
-                url:api("static-incomes/ajax_edit"),
+                url:api("static-expenses/ajax_edit"),
                 type:"POST",
                 dataType: "JSON",
                 data: new FormData(this),
@@ -211,8 +211,8 @@
                             }
                         });
                         toastr.success("Update Successfully.");
-                        $('#editStaticIncomeModal').modal('toggle');
-                        $('.update-static-income')[0].reset()
+                        $('#editStaticExpenseModal').modal('toggle');
+                        $('.update-static-expense')[0].reset()
                     }
                 },
                 error:function(error){

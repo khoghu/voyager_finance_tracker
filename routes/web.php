@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\StaticIncomeController;
+use App\Http\Controllers\StaticExpenseController;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,4 +45,11 @@ Route::group(['prefix' => 'admin'], function () {
     Route::post('static-incomes/ajax_edit', [StaticIncomeController::class, 'ajax_edit'])->name('voyager.static-incomes.ajax_edit');
     Route::post('static-incomes/ajax_delete', [StaticIncomeController::class, 'ajax_delete'])->name('voyager.static-incomes.ajax_delete');
     Route::post('static-incomes/ajax_bulk_delete', [StaticIncomeController::class, 'ajax_bulk_delete'])->name('voyager.static-incomes.ajax_bulk_delete');
+
+    // static expense
+    Route::get('static-expenses', [StaticExpenseController::class, 'my_index'])->name('voyager.static-expenses.index');
+    Route::post('static-expenses/ajax_add', [StaticExpenseController::class, 'ajax_add'])->name('voyager.static-expenses.ajax_add');
+    Route::post('static-expenses/ajax_edit', [StaticExpenseController::class, 'ajax_edit'])->name('voyager.static-expenses.ajax_edit');
+    Route::post('static-expenses/ajax_delete', [StaticExpenseController::class, 'ajax_delete'])->name('voyager.static-expenses.ajax_delete');
+    Route::post('static-expenses/ajax_bulk_delete', [StaticExpenseController::class, 'ajax_bulk_delete'])->name('voyager.static-expenses.ajax_bulk_delete');
 });
