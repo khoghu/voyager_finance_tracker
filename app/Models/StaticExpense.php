@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 
-class StaticIncome extends Model
+class StaticExpense extends Model
 {
-    protected $table = 'static_incomes';
+    protected $table = 'static_expenses';
 
     protected $fillable = [
         'user_id',
@@ -16,7 +16,7 @@ class StaticIncome extends Model
         'title',
         'description',
         'amount',
-        'debit_day_per_month',
+        'credit_day_per_month',
     ];
 
     /**

@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
-use App\Models\StaticIncome;
+use App\Models\StaticExpense;
 use App\Models\FinanceGroup;
 
 // voyager
@@ -17,7 +17,7 @@ use TCG\Voyager\Facades\Voyager;
 use TCG\Voyager\Http\Middleware\VoyagerAdminMiddleware;
 
 
-class StaticIncomeController extends \TCG\Voyager\Http\Controllers\VoyagerBreadController
+class StaticExpenseController extends \TCG\Voyager\Http\Controllers\VoyagerBreadController
 {
     public function __construct()
     {
@@ -43,9 +43,9 @@ class StaticIncomeController extends \TCG\Voyager\Http\Controllers\VoyagerBreadC
         ];
 
         if($sort_order_field->value) {
-            $requests = StaticIncome::where('user_id', Auth::user()->id)->orderBy($sort_order_field->value, "asc");
+            $requests = StaticExpense::where('user_id', Auth::user()->id)->orderBy($sort_order_field->value, "asc");
         } else {
-            $requests = StaticIncome::where('user_id', Auth::user()->id)->orderBy("id","DESC");
+            $requests = StaticExpense::where('user_id', Auth::user()->id)->orderBy("id","DESC");
         }
 
         if($search->value){
@@ -70,7 +70,7 @@ class StaticIncomeController extends \TCG\Voyager\Http\Controllers\VoyagerBreadC
 
         $requests = $requests->paginate(10)->withQueryString();
 
-        $view = 'voyager.static-income.browse';
+        $view = 'voyager.static-expense.browse';
 
         return Voyager::view($view, compact(
             'search',
@@ -85,7 +85,7 @@ class StaticIncomeController extends \TCG\Voyager\Http\Controllers\VoyagerBreadC
 
     public function ajax_add(Request $request)
     {
-        $validKey = array('group_id','title','description','amount','debit_day_per_month','user_id');
+        $validKey = array('group_id','title','description','amount','credit_day_per_month','user_id');
         
         $new = collect();
 
@@ -98,7 +98,7 @@ class StaticIncomeController extends \TCG\Voyager\Http\Controllers\VoyagerBreadC
             }
         }
 
-        $newStaticIncome = StaticIncome::create($new->toArray());
+        $newStaticIncome = StaticExpense::create($new->toArray());
 
         $newStaticIncome->load("group");
 
@@ -109,7 +109,7 @@ class StaticIncomeController extends \TCG\Voyager\Http\Controllers\VoyagerBreadC
 
     public function ajax_edit(Request $request)
     {
-        $validKey = array('id','group_id','title','description','amount','debit_day_per_month');
+        $validKey = array('id','group_id','title','description','amount','credit_day_per_month');
         
         $update = collect();
 
@@ -119,7 +119,7 @@ class StaticIncomeController extends \TCG\Voyager\Http\Controllers\VoyagerBreadC
             }
         }
 
-        $updateStaticIncome = StaticIncome::where("id", $request->id)->first();
+        $updateStaticIncome = StaticExpense::where("id", $request->id)->first();
 
         $updateStaticIncome->update($update->toArray());
 
@@ -136,14 +136,14 @@ class StaticIncomeController extends \TCG\Voyager\Http\Controllers\VoyagerBreadC
 
         if($delete_id){
 
-            $staticIncome = StaticIncome::where("id", $delete_id)->first();
+            $staticIncome = StaticExpense::where("id", $delete_id)->first();
 
             $staticIncome->delete();
 
-            return response()->json(["success"=>true,"message"=>"Successfully deleted static income"]);  
+            return response()->json(["success"=>true,"message"=>"Successfully deleted static expense"]);  
 
         } else {
-            return response()->json(['static income id is required'], 422); 
+            return response()->json(['static expense id is required'], 422); 
         }
     }
 
@@ -153,12 +153,12 @@ class StaticIncomeController extends \TCG\Voyager\Http\Controllers\VoyagerBreadC
 
         if(count($delete_ids) > 0){
 
-            StaticIncome::whereIn('id', $delete_ids)->delete();
+            StaticExpense::whereIn('id', $delete_ids)->delete();
 
-            return response()->json(["success"=>true,"message"=>"Successfully deleted static incomes"]);
+            return response()->json(["success"=>true,"message"=>"Successfully deleted static expenses"]);
 
         } else {
-            return response()->json(['static income ids is required'], 422); 
+            return response()->json(['static expenses ids is required'], 422); 
         }
     }
 }

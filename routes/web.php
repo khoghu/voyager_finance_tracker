@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\IncomeController;
+use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\StaticIncomeController;
 
 /*
@@ -29,6 +30,13 @@ Route::group(['prefix' => 'admin'], function () {
     Route::post('incomes/ajax_edit', [IncomeController::class, 'ajax_edit'])->name('voyager.incomes.ajax_edit');
     Route::post('incomes/ajax_delete', [IncomeController::class, 'ajax_delete'])->name('voyager.incomes.ajax_delete');
     Route::post('incomes/ajax_bulk_delete', [IncomeController::class, 'ajax_bulk_delete'])->name('voyager.incomes.ajax_bulk_delete');
+
+    // expense
+    Route::get('expenses', [ExpenseController::class, 'my_index'])->name('voyager.expenses.index');
+    Route::post('expenses/ajax_add', [ExpenseController::class, 'ajax_add'])->name('voyager.expenses.ajax_add');
+    Route::post('expenses/ajax_edit', [ExpenseController::class, 'ajax_edit'])->name('voyager.expenses.ajax_edit');
+    Route::post('expenses/ajax_delete', [ExpenseController::class, 'ajax_delete'])->name('voyager.expenses.ajax_delete');
+    Route::post('expenses/ajax_bulk_delete', [ExpenseController::class, 'ajax_bulk_delete'])->name('voyager.expenses.ajax_bulk_delete');
 
     // static income
     Route::get('static-incomes', [StaticIncomeController::class, 'my_index'])->name('voyager.static-incomes.index');

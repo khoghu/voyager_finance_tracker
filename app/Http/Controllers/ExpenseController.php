@@ -70,7 +70,7 @@ class ExpenseController extends \TCG\Voyager\Http\Controllers\VoyagerBreadContro
 
         $requests = $requests->paginate(10)->withQueryString();
 
-        $view = 'voyager.income.browse';
+        $view = 'voyager.expense.browse';
 
         return Voyager::view($view, compact(
             'search',
@@ -103,7 +103,11 @@ class ExpenseController extends \TCG\Voyager\Http\Controllers\VoyagerBreadContro
                 $new->put($key, Auth::user()->id);
             }
             if($key == 'status'){
-                $new->put($key, 'pending');
+                if($request->input($key)){
+                    $new->put($key, $request->input($key));
+                } else {
+                    $new->put($key, 'Pending');
+                }
             }
         }
 
@@ -113,12 +117,12 @@ class ExpenseController extends \TCG\Voyager\Http\Controllers\VoyagerBreadContro
 
         $newExpense->credited_at = $newExpense->credited_at ? Carbon::create($newExpense->credited_at)->addHour(8)->format('Y-m-d H:i:s') : null;
         
-        return response()->json(["success"=>true,"message"=> $newIncome]);   
+        return response()->json(["success"=>true,"message"=> $newExpense]);   
     }
 
     public function ajax_edit(Request $request)
     {
-        $validKey = array('id','group_id','title','description','amount','attachment','credited_at');
+        $validKey = array('id','group_id','title','description','amount','attachment','credited_at','status');
         
         $update = collect();
 
@@ -128,25 +132,32 @@ class ExpenseController extends \TCG\Voyager\Http\Controllers\VoyagerBreadContro
             }
             if($request->file('attachment') && $key == "attachment") {
                 $image = $request->file('attachment');
-                $path = Storage::disk('public')->put('income', $image);
+                $path = Storage::disk('public')->put('expense', $image);
                 $update->put($key, $path);
+            } 
+            if($key == 'status'){
+                if($request->input($key)){
+                    $update->put($key, $request->input($key));
+                } else {
+                    $update->put($key, 'Pending');
+                }
             }
         }
 
-        $updateIncome = Income::where("id", $request->id)->first();
+        $updateExpense = Expense::where("id", $request->id)->first();
 
-        if($request->file('attachment') && $updateIncome->attachment 
-            && Storage::disk('public')->exists($updateIncome->attachment)) {
-            Storage::disk('public')->delete($updateIncome->attachment);
+        if($request->file('attachment') && $updateExpense->attachment 
+            && Storage::disk('public')->exists($updateExpense->attachment)) {
+            Storage::disk('public')->delete($updateExpense->attachment);
         }
 
-        $updateIncome->update($update->toArray());
+        $updateExpense->update($update->toArray());
 
-        $updateIncome->load("group");
+        $updateExpense->load("group");
 
-        $updateIncome->credited_at = $updateIncome->credited_at ? Carbon::create($updateIncome->credited_at)->addHour(8)->format('Y-m-d H:i:s') : null;
+        $updateExpense->credited_at = $updateExpense->credited_at ? Carbon::create($updateExpense->credited_at)->addHour(8)->format('Y-m-d H:i:s') : null;
         
-        return response()->json(["success"=>true,"message"=>$updateIncome]);   
+        return response()->json(["success"=>true,"message"=>$updateExpense]);   
     }
 
     public function ajax_delete(Request $request){
@@ -155,18 +166,18 @@ class ExpenseController extends \TCG\Voyager\Http\Controllers\VoyagerBreadContro
 
         if($delete_id){
 
-            $income = Income::where("id", $delete_id)->first();
+            $expense = Expense::where("id", $delete_id)->first();
 
-            if($income->attachment && Storage::disk('public')->exists($income->attachment)) { 
-                Storage::disk('public')->delete($income->attachment); 
+            if($expense->attachment && Storage::disk('public')->exists($expense->attachment)) { 
+                Storage::disk('public')->delete($expense->attachment); 
             }
 
-            $income->delete();
+            $expense->delete();
 
-            return response()->json(["success"=>true,"message"=>"Successfully deleted income"]);  
+            return response()->json(["success"=>true,"message"=>"Successfully deleted expense"]);  
 
         } else {
-            return response()->json(['income id is required'], 422); 
+            return response()->json(['expense id is required'], 422); 
         }
     }
 
@@ -176,20 +187,20 @@ class ExpenseController extends \TCG\Voyager\Http\Controllers\VoyagerBreadContro
 
         if(count($delete_ids) > 0){
 
-            $incomes = Income::whereIn('id', $delete_ids)->get();
+            $expenses = Expense::whereIn('id', $delete_ids)->get();
 
-            foreach($incomes as $income){
-                if($income->attachment && Storage::disk('public')->exists($income->attachment)) { 
-                    Storage::disk('public')->delete($income->attachment); 
+            foreach($expenses as $expense){
+                if($expense->attachment && Storage::disk('public')->exists($expense->attachment)) { 
+                    Storage::disk('public')->delete($expense->attachment); 
                 }
             }
 
-            Income::whereIn('id', $delete_ids)->delete();
+            Expense::whereIn('id', $delete_ids)->delete();
 
-            return response()->json(["success"=>true,"message"=>"Successfully deleted incomes"]);
+            return response()->json(["success"=>true,"message"=>"Successfully deleted expenses"]);
 
         } else {
-            return response()->json(['income ids is required'], 422); 
+            return response()->json(['expenses ids is required'], 422); 
         }
     }
 }

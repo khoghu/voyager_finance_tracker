@@ -1,6 +1,6 @@
 @extends('voyager::master')
 
-@section('page_title', 'Static Incomes')
+@section('page_title', 'Expenses')
 
 @section('page_header')
     <div class="container-fluid">
@@ -8,7 +8,7 @@
             <i class="{{ $dataType->icon }}"></i> {{ $dataType->getTranslatedAttribute('display_name_plural') }}
         </h1>
         @can('add', app($dataType->model_name))
-            <a data-toggle="modal" data-target="#newStaticIncomeModal" class="btn btn-success add btn-add-new">
+            <a data-toggle="modal" data-target="#newExpenseModal" class="btn btn-success add btn-add-new">
                 <i class="voyager-plus"></i> <span>{{ __('voyager::generic.add_new') }}</span>
             </a>
         @endcan
@@ -48,7 +48,7 @@
                                 <option value="title">Title</option>
                                 <option value="description">Description</option>
                                 <option value="amount">Amount</option>
-                                <option value="debit_day_per_month">Debit Day Per Month</option>
+                                <option value="credited_at">Credited At</option>
                             </select>
                         </div>
                         <div class="table-responsive">
@@ -61,20 +61,32 @@
                                        <th>Title</th>
                                        <th>Description</th>
                                        <th>Amount</th>
-                                       <th>Debit Day Per Month</th>
+                                       <th>Attachment</th>
+                                       <th>Status</th>
+                                       <th>Credited At</th>
                                        <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody id="pending-tbody">
                                      @foreach($requests as $request)
-                                        <tr class="static-income-row" row_id="{{$request->id}}">
+                                        <tr class="expense-row" row_id="{{$request->id}}">
                                             <td><input type="checkbox" check_type="{{$request->id}}"></td>
                                             <td class="id">{{ $request->id }}</td>
                                             <td class="group_id" group_id="{{$request->group_id}}">{{ $request->group->name }}</td>
                                             <td class="title">{{ $request->title }}</td>
                                             <td class="description">{{ $request->description }}</td>
                                             <td class="amount" amount="{{ $request->amount }}">RM {{ $request->amount }}</td>
-                                            <td class="debit_day_per_month">{{ $request->debit_day_per_month }}</td>
+                                            <td class="attachment">
+                                                @if($request->attachment)
+                                                <img src="http://127.0.0.1:8000/storage/{{ $request->attachment }}" style="width:120px">
+                                                @endif
+                                            </td>
+                                            <td class="status" style="font-weight:bold; @if($request->status == 'Pending') color:#dbad05; @else color:#1cba03; @endif">{{ $request->status }}</td>
+                                            <td class="credited_at">
+                                                @if($request->credited_at)
+                                                    {{ \Carbon\Carbon::create($request->credited_at)->addHour(8)->format('Y-m-d H:i:s') }}
+                                                @endif
+                                            </td>
                                             <td>
                                                 <div class="table-actions-btn">
                                                     <div class="edit" edit_id="{{$request->id}}"><i class="voyager-edit"></i>Edit</div>
@@ -101,7 +113,7 @@
         </div>
     </div>
 
-    @include('voyager.static-income.staticIncomeModals')
+    @include('voyager.expense.expenseModals')
     
 @stop
 
@@ -121,10 +133,10 @@
         var delete_id;
         $(document).ready(function () {
             $("#sort_field").on("change", function(){
-                reroute(api("static-incomes?sort="+$(this).val()));
+                reroute(api("expenses?sort="+$(this).val()));
             })
             $(".add").on("click", function(){
-                $(".new-static-income")[0].reset()
+                $(".new-expense")[0].reset()
             })
             $("#pending-tbody").on("click", ".delete", function(){
                 delete_id = $(this).attr("delete_id");
@@ -139,16 +151,21 @@
             $("#pending-tbody").on("click", ".edit", function(){
                 var tbody_row = $("tr[row_id='"+ $(this).attr("edit_id") +"']")
                 tbody_row.find('td').each(function(index) {
-                    console.log(index + " = " + $(this).text())
                     if($(this).attr('class') == 'group_id'){
-                        $("#editStaticIncomeModal").find("select[name='"+$(this).attr('class')+"']").val($(this).attr('group_id'));
-                    } else if($(this).attr('class') == 'amount'){
-                        $("#editStaticIncomeModal").find("input[name='"+$(this).attr('class')+"']").val($(this).attr('amount'));
-                    } else if (index != 0 && index != 7) {
-                        $("#editStaticIncomeModal").find("input[name='"+$(this).attr('class')+"']").val($(this).text());
+                        $("#editExpenseModal").find("select[name='"+$(this).attr('class')+"']").val($(this).attr('group_id'));
+                    } else if ($(this).attr('class') == 'amount'){
+                        $("#editExpenseModal").find("input[name='"+$(this).attr('class')+"']").val($(this).attr('amount'));
+                    } else if ($(this).attr('class') == 'status') {
+                        if($(this).text() == 'Complete') {
+                            $("#editExpenseModal").find("input[name='"+$(this).attr('class')+"']").prop('checked', true);
+                        } else {
+                            $("#editExpenseModal").find("input[name='"+$(this).attr('class')+"']").prop('checked', false);
+                        }
+                    } else if (index != 0 && index != 6 && index != 9) {
+                        $("#editExpenseModal").find("input[name='"+$(this).attr('class')+"']").val($(this).text());
                     }
                 })
-                $('#editStaticIncomeModal').modal('toggle');
+                $('#editExpenseModal').modal('toggle');
             })
             $("input[check_type='all']").on("click", function(){
                 var all_checked = this.checked
@@ -171,17 +188,17 @@
                 }
             })
             
-            $(".new-static-income").on("submit",add_static_income);
-            $(".update-static-income").on("submit", update_static_income);
-            $(".delete_confirm").on("click", function() { delete_record('static-incomes', delete_id) })
-            $(".bulk_delete_confirm").on("click", function() { delete_bulk_records('static-incomes', bulk_delete_array) })
+            $(".new-expense").on("submit",add_expense);
+            $(".update-expense").on("submit", update_expense);
+            $(".delete_confirm").on("click", function() { delete_record('expenses', delete_id) })
+            $(".bulk_delete_confirm").on("click", function() { delete_bulk_records('expenses', bulk_delete_array) })
         });
 
         //add new record
-        function add_static_income(e){
+        function add_expense(e){
             e.preventDefault();
             $.ajax({
-                url:api("static-incomes/ajax_add"),
+                url:api("expenses/ajax_add"),
                 type:"POST",
                 dataType: "JSON",
                 data: new FormData(this),
@@ -191,7 +208,7 @@
                     // console.log("pass");
                     // console.log(data);
                     if(data.success) {
-                        $("#pending-tbody").prepend('<tr class="income-row" row_id="'+ data.message.id +'">')
+                        $("#pending-tbody").prepend('<tr class="expense-row" row_id="'+ data.message.id +'">')
                         var tbody_row = $("tr[row_id='"+ data.message.id +"']")
                         tbody_row.append('<td><input type="checkbox" check_type="'+ data.message.id +'"></td>')
                         tbody_row.append('<td class="id">'+ data.message.id +'</td>')
@@ -199,13 +216,24 @@
                         tbody_row.append('<td class="title">'+ data.message.title +'</td>')
                         tbody_row.append('<td class="description">'+ data.message.description +'</td>')
                         tbody_row.append('<td class="amount" amount="'+ data.message.amount +'">RM '+ data.message.amount +'</td>')
-                        tbody_row.append('<td class="debit_day_per_month">'+ data.message.debit_day_per_month +'</td>')
+                        if(data.message.attachment){
+                            tbody_row.append('<td class="attachment"><img src="http://127.0.0.1:8000/storage/'+ data.message.attachment +'" style="width:120px"></td>')
+                        } else {
+                            tbody_row.append('<td class="attachment"></td>')
+                        }
+                        var status_color = data.message.status == 'Pending' ? '#dbad05' : '#1cba03';
+                        tbody_row.append('<td class="status" style="font-weight:bold; color:'+ status_color +';">'+ data.message.status +'</td>')
+                        if(data.message.credited_at){
+                            tbody_row.append('<td class="credited_at">'+ data.message.credited_at.substring(0, 19).replace("T", " ") +'</td>')
+                        } else {
+                            tbody_row.append('<td class="credited_at"></td>')
+                        }
                         tbody_row.append('<td><div class="table-actions-btn"></div></td>')
                         tbody_row.find(".table-actions-btn").append('<div class="edit" edit_id="'+ data.message.id +'"><i class="voyager-edit"></i>Edit</div>')
                         tbody_row.find(".table-actions-btn").append('<div class="delete" delete_id="'+ data.message.id +'" data-toggle="modal" data-target="#delete_modal"><i class="voyager-trash"></i>Delete</div> ')
                         toastr.success("Added Successfully.");
-                        $('#newStaticIncomeModal').modal('toggle');
-                        $('.new-static-income')[0].reset()
+                        $('#newExpenseModal').modal('toggle');
+                        $('.new-expense')[0].reset()
                     }
                 },
                 error:function(error){
@@ -218,10 +246,10 @@
         }
 
         //edit record
-        function update_static_income(e){
+        function update_expense(e){
             e.preventDefault();
             $.ajax({
-                url:api("static-incomes/ajax_edit"),
+                url:api("expenses/ajax_edit"),
                 type:"POST",
                 dataType: "JSON",
                 data: new FormData(this),
@@ -237,13 +265,20 @@
                                 tbody_row.find("."+key).attr(key, value).text(data.message.group.name);
                             } else if (key == 'amount') {
                                 tbody_row.find("."+key).attr(key, value).text("RM "+value);
+                            } else if (key == 'attachment' && value) {
+                                tbody_row.find("."+key).html('<img src="http://127.0.0.1:8000/storage/'+ value +'" style="width:120px">');
+                            } else if (key == 'status') {
+                                var status_color = value == 'Pending' ? '#dbad05' : '#1cba03';
+                                tbody_row.find("."+key).attr('style', 'font-weight:bold; color:'+ status_color +';').text(value);
+                            } else if (key == 'credited_at' && value) {
+                                tbody_row.find("."+key).text(value.substring(0, 19).replace("T", " "))
                             } else {
                                 tbody_row.find("."+key).text(value);
                             }
                         });
                         toastr.success("Update Successfully.");
-                        $('#editStaticIncomeModal').modal('toggle');
-                        $('.update-static-income')[0].reset()
+                        $('#editExpenseModal').modal('toggle');
+                        $('.update-expense')[0].reset()
                     }
                 },
                 error:function(error){
