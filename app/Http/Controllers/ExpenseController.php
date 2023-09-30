@@ -102,6 +102,11 @@ class ExpenseController extends \TCG\Voyager\Http\Controllers\VoyagerBreadContro
             if($key == 'user_id'){
                 $new->put($key, Auth::user()->id);
             }
+            if($key == 'amount'){
+                if(! fmod($request->input($key), 1) !== 0.00){
+                    $new->put($key, number_format($request->input($key), 2, '.', ''));
+                }
+            }
             if($key == 'status'){
                 if($request->input($key)){
                     $new->put($key, $request->input($key));
@@ -134,6 +139,11 @@ class ExpenseController extends \TCG\Voyager\Http\Controllers\VoyagerBreadContro
                 $image = $request->file('attachment');
                 $path = Storage::disk('public')->put('expense', $image);
                 $update->put($key, $path);
+            }
+            if($key == 'amount'){
+                if(! fmod($request->input($key), 1) !== 0.00){
+                    $new->put($key, number_format($request->input($key), 2, '.', ''));
+                }
             } 
             if($key == 'status'){
                 if($request->input($key)){

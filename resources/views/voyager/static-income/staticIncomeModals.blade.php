@@ -29,7 +29,7 @@
                     </div>
                     <div class="form-group">
                         <label for="amount" class="col-form-label">Amount:</label>
-                        <input type="number" class="form-control" name="amount" required>
+                        <input type="number" step="0.01" pattern="^\d+(\.\d{2})?$" title="Please enter a number with two decimal places" class="form-control" name="amount" required>
                     </div>
                     <div class="form-group">
                         <label for="debit_day_per_month" class="col-form-label">Debit Day Per Month:</label>
@@ -76,7 +76,7 @@
                     </div>
                     <div class="form-group">
                         <label for="amount" class="col-form-label">Amount:</label>
-                        <input type="number" class="form-control" name="amount" required>
+                        <input type="number" step="0.01" pattern="^\d+(\.\d{2})?$" title="Please enter a number with two decimal places" class="form-control" name="amount" required>
                     </div>
                     <div class="form-group">
                         <label for="debit_day_per_month" class="col-form-label">Debit Day Per Month:</label>

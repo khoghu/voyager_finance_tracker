@@ -5,6 +5,7 @@ use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\StaticIncomeController;
 use App\Http\Controllers\StaticExpenseController;
+use App\Http\Controllers\DashBoardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +25,9 @@ Route::get('/', function () {
 Route::group(['prefix' => 'admin'], function () {
     
     Voyager::routes();
+
+    // dashboard
+    Route::get('/', [DashBoardController::class, 'my_index'])->name('voyager.dashboard');
 
     // income
     Route::get('incomes', [IncomeController::class, 'my_index'])->name('voyager.incomes.index');
