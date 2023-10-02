@@ -72,7 +72,7 @@
                                             <td class="id">{{ $request->id }}</td>
                                             <td class="group_id" group_id="{{$request->group_id}}">{{ $request->group->name }}</td>
                                             <td class="title">{{ $request->title }}</td>
-                                            <td class="description">{{ $request->description }}</td>
+                                            <td class="description">@if($request->description) {{ $request->description }} @endif</td>
                                             <td class="amount" amount="{{ $request->amount }}">RM {{ $request->amount }}</td>
                                             <td class="credit_day_per_month">{{ $request->credit_day_per_month }}</td>
                                             <td>
@@ -120,17 +120,19 @@
         var bulk_delete_array = []
         var delete_id;
         $(document).ready(function () {
+            select2Customize("newStaticExpenseModal", "editStaticExpenseModal")
             $("#sort_field").on("change", function(){
                 reroute(api("static-expenses?sort="+$(this).val()));
             })
             $(".add").on("click", function(){
                 $(".new-static-expense")[0].reset()
+                $("#select-drop-down-add").val('').trigger('change');
             })
             $("#pending-tbody").on("click", ".edit", function(){
                 var tbody_row = $("tr[row_id='"+ $(this).attr("edit_id") +"']")
                 tbody_row.find('td').each(function(index) {
                     if($(this).attr('class') == 'group_id'){
-                        $("#editStaticExpenseModal").find("select[name='"+$(this).attr('class')+"']").val($(this).attr('group_id'));
+                        $("#editStaticExpenseModal").find("select[name='"+$(this).attr('class')+"']").val($(this).attr('group_id')).trigger('change');
                     } else if($(this).attr('class') == 'amount'){
                         $("#editStaticExpenseModal").find("input[name='"+$(this).attr('class')+"']").val($(this).attr('amount'));
                     } else if (index != 0 && index != 7) {
@@ -166,7 +168,11 @@
                         tbody_row.append('<td class="id">'+ data.message.id +'</td>')
                         tbody_row.append('<td class="group_id" group_id="'+ data.message.group_id +'">'+ data.message.group.name +'</td>')
                         tbody_row.append('<td class="title">'+ data.message.title +'</td>')
-                        tbody_row.append('<td class="description">'+ data.message.description +'</td>')
+                        if(data.message.description ){
+                            tbody_row.append('<td class="description">'+ data.message.description +'</td>')
+                        } else {
+                            tbody_row.append('<td class="description"></td>')
+                        }
                         tbody_row.append('<td class="amount" amount="'+ data.message.amount +'">RM '+ data.message.amount +'</td>')
                         tbody_row.append('<td class="credit_day_per_month">'+ data.message.credit_day_per_month +'</td>')
                         tbody_row.append('<td><div class="table-actions-btn"></div></td>')

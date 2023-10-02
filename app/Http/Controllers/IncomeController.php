@@ -135,7 +135,7 @@ class IncomeController extends \TCG\Voyager\Http\Controllers\VoyagerBreadControl
             }
             if($key == 'amount'){
                 if(! fmod($request->input($key), 1) !== 0.00){
-                    $new->put($key, number_format($request->input($key), 2, '.', ''));
+                    $update->put($key, number_format($request->input($key), 2, '.', ''));
                 }
             }
         }

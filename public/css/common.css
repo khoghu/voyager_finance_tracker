@@ -91,3 +91,50 @@ label {
     margin-bottom:0px; 
     margin-left:5px;
 }
+.count_record{
+    display: flex;
+    justify-content: space-between;
+}
+.record_list{
+    width: 20%;
+    margin: 10px 0px;
+}
+.list_count{
+    padding:10px; 
+    border-radius:20px; 
+    text-align: center; 
+    border: solid 2px cornflowerblue !important;
+}
+.chart_css{
+    display: flex;
+    height: 400px;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+.chart_css_list{
+    display: flex;
+    justify-content: center;
+    width: 50%;
+    flex: 1;
+}
+.recent_activity > h4{
+    font-weight: bold;
+    margin: 20px 0px;
+}
+@media (max-width: 800px) {
+    .count_record {
+        flex-direction: column;
+    }
+    .record_list{
+        width: 100%;
+    }
+    .page-content{
+        margin: 0px 10px;
+    }
+    .chart_css{
+        flex-direction: column;
+    }
+    .chart_css_list{
+        width: 100%;
+    }
+}

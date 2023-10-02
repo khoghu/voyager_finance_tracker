@@ -12,7 +12,7 @@
                 <form class="new-static-expense">
                     <div class="form-group">
                         <label for="group" class="col-form-label">Group:</label>
-                        <select type="text" class="form-control" name="group_id" required>
+                        <select type="text" id="select-drop-down-add" class="form-control" name="group_id" required>
                             <option value="" disabled selected>Select Finance Group</option>
                             @foreach($groups as $group)
                                 <option value="{{$group->id}}">{{ $group->name }}</option>
@@ -25,7 +25,7 @@
                     </div>
                     <div class="form-group">
                         <label for="description" class="col-form-label">Description:</label>
-                        <input type="text" class="form-control" name="description" required>
+                        <input type="text" class="form-control" name="description">
                     </div>
                     <div class="form-group">
                         <label for="amount" class="col-form-label">Amount:</label>
@@ -59,7 +59,7 @@
                     <input type="hidden" name="id">
                     <div class="form-group">
                         <label for="group" class="col-form-label">Group:</label>
-                        <select type="text" class="form-control" name="group_id" required>
+                        <select type="text" id="select-drop-down-edit" class="form-control" name="group_id" required>
                             <option value="" disabled selected>Select Finance Group</option>
                             @foreach($groups as $group)
                                 <option value="{{$group->id}}">{{ $group->name }}</option>
@@ -72,7 +72,7 @@
                     </div>
                     <div class="form-group">
                         <label for="description" class="col-form-label">Description:</label>
-                        <input type="text" class="form-control" name="description" required>
+                        <input type="text" class="form-control" name="description">
                     </div>
                     <div class="form-group">
                         <label for="amount" class="col-form-label">Amount:</label>

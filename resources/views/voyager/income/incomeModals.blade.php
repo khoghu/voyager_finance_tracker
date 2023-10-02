@@ -12,7 +12,7 @@
                 <form class="new-income">
                     <div class="form-group">
                         <label for="group" class="col-form-label">Group:</label>
-                        <select type="text" class="form-control" name="group_id" required>
+                        <select type="text" id="select-drop-down-add" class="form-control" name="group_id" required>
                             <option value="" disabled selected>Select Finance Group</option>
                             @foreach($groups as $group)
                                 <option value="{{$group->id}}">{{ $group->name }}</option>
@@ -25,7 +25,7 @@
                     </div>
                     <div class="form-group">
                         <label for="description" class="col-form-label">Description:</label>
-                        <input type="text" class="form-control" name="description" required>
+                        <input type="text" class="form-control" name="description">
                     </div>
                     <div class="form-group">
                         <label for="amount" class="col-form-label">Amount:</label>
@@ -63,7 +63,7 @@
                     <input type="hidden" name="id">
                     <div class="form-group">
                         <label for="group" class="col-form-label">Group:</label>
-                        <select type="text" class="form-control" name="group_id" required>
+                        <select type="text" id="select-drop-down-edit" class="form-control" name="group_id" required>
                             <option value="" disabled selected>Select Finance Group</option>
                             @foreach($groups as $group)
                                 <option value="{{$group->id}}">{{ $group->name }}</option>
@@ -76,7 +76,7 @@
                     </div>
                     <div class="form-group">
                         <label for="description" class="col-form-label">Description:</label>
-                        <input type="text" class="form-control" name="description" required>
+                        <input type="text" class="form-control" name="description">
                     </div>
                     <div class="form-group">
                         <label for="amount" class="col-form-label">Amount:</label>
@@ -126,6 +126,20 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger pull-right bulk_delete_confirm">Delete Confirm</button>
                 <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- image display modal -->
+<div id="imagemodal_4" class="modal fade" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+            </div> 
+            <div class="modal-body">
+                <img src="http://127.0.0.1:8000/storage/users/default.png" class="img img-responsive" style="margin: 0px auto;">
             </div>
         </div>
     </div>

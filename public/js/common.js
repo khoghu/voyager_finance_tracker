@@ -70,6 +70,7 @@ function delete_bulk_records(page, bulk_delete){
                     $("tr[row_id='"+ id +"']").remove()
                 });
                 bulk_delete_array = []
+                $('th').find("input[type='checkbox']").prop('checked', false)
                 toastr.success("Deleted Successfully.");
             } else {
                 toastr.warning(data.message);
@@ -82,6 +83,15 @@ function delete_bulk_records(page, bulk_delete){
             toastr.error("Something went wrong.")
         }
     });
+}
+
+function select2Customize(add_modal_id, edit_modal_id) {
+    $("#select-drop-down-add").select2({ dropdownParent: "#"+add_modal_id })
+    $("#select-drop-down-edit").select2({ dropdownParent: "#"+edit_modal_id });
+    $(".select2").addClass("form-control")
+    $(".select2").attr("style", "width:100%;")
+    $(".select2-selection__rendered").attr("style", "line-height: unset; padding-left: 5px;")
+    $(".select2-selection--single").attr("style", "border: 0px; height: auto; padding: 0px;")
 }
 
 $(document).ready(function () {
@@ -125,5 +135,8 @@ $(document).ready(function () {
         } else {
             bulk_delete_array.splice(bulk_delete_array.indexOf(selected_id), 1);
         }
+    })
+    $('#pending-tbody').on('click', '.attachment', function() {
+        $('#imagemodal_4').find('img').attr('src', $(this).find('img').attr('src'))
     })
 });

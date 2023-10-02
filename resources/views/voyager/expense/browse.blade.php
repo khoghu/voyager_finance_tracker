@@ -74,17 +74,17 @@
                                             <td class="id">{{ $request->id }}</td>
                                             <td class="group_id" group_id="{{$request->group_id}}">{{ $request->group->name }}</td>
                                             <td class="title">{{ $request->title }}</td>
-                                            <td class="description">{{ $request->description }}</td>
+                                            <td class="description">@if($request->description) {{ $request->description }} @endif</td>
                                             <td class="amount" amount="{{ $request->amount }}">RM {{ $request->amount }}</td>
                                             <td class="attachment">
                                                 @if($request->attachment)
-                                                <img src="http://127.0.0.1:8000/storage/{{ $request->attachment }}" style="width:120px">
+                                                <img data-toggle="modal" data-target="#imagemodal_4" src="http://127.0.0.1:8000/storage/{{ $request->attachment }}" style="width:120px; cursor:pointer;">
                                                 @endif
                                             </td>
                                             <td class="status" style="font-weight:bold; @if($request->status == 'Pending') color:#dbad05; @else color:#1cba03; @endif">{{ $request->status }}</td>
                                             <td class="credited_at">
                                                 @if($request->credited_at)
-                                                    {{ \Carbon\Carbon::create($request->credited_at)->addHour(8)->format('Y-m-d H:i:s') }}
+                                                    {{ $request->credited_at }}
                                                 @endif
                                             </td>
                                             <td>
@@ -132,17 +132,20 @@
         var bulk_delete_array = []
         var delete_id;
         $(document).ready(function () {
+            select2Customize("newExpenseModal", "editExpenseModal")
             $("#sort_field").on("change", function(){
                 reroute(api("expenses?sort="+$(this).val()));
             })
             $(".add").on("click", function(){
                 $(".new-expense")[0].reset()
+                $("#select-drop-down-add").val('').trigger('change');
             })
             $("#pending-tbody").on("click", ".edit", function(){
                 var tbody_row = $("tr[row_id='"+ $(this).attr("edit_id") +"']")
+                $('.update-expense')[0].reset()
                 tbody_row.find('td').each(function(index) {
                     if($(this).attr('class') == 'group_id'){
-                        $("#editExpenseModal").find("select[name='"+$(this).attr('class')+"']").val($(this).attr('group_id'));
+                        $("#editExpenseModal").find("select[name='"+$(this).attr('class')+"']").val($(this).attr('group_id')).trigger('change');
                     } else if ($(this).attr('class') == 'amount'){
                         $("#editExpenseModal").find("input[name='"+$(this).attr('class')+"']").val($(this).attr('amount'));
                     } else if ($(this).attr('class') == 'status') {
@@ -184,10 +187,14 @@
                         tbody_row.append('<td class="id">'+ data.message.id +'</td>')
                         tbody_row.append('<td class="group_id" group_id="'+ data.message.group_id +'">'+ data.message.group.name +'</td>')
                         tbody_row.append('<td class="title">'+ data.message.title +'</td>')
-                        tbody_row.append('<td class="description">'+ data.message.description +'</td>')
+                        if(data.message.description ){
+                            tbody_row.append('<td class="description">'+ data.message.description +'</td>')
+                        } else {
+                            tbody_row.append('<td class="description"></td>')
+                        }
                         tbody_row.append('<td class="amount" amount="'+ data.message.amount +'">RM '+ data.message.amount +'</td>')
                         if(data.message.attachment){
-                            tbody_row.append('<td class="attachment"><img src="http://127.0.0.1:8000/storage/'+ data.message.attachment +'" style="width:120px"></td>')
+                            tbody_row.append('<td data-toggle="modal" data-target="#imagemodal_4" class="attachment"><img src="http://127.0.0.1:8000/storage/'+ data.message.attachment +'" style="width:120px; cursor:pointer;"></td>')
                         } else {
                             tbody_row.append('<td class="attachment"></td>')
                         }
@@ -203,7 +210,6 @@
                         tbody_row.find(".table-actions-btn").append('<div class="delete" delete_id="'+ data.message.id +'" data-toggle="modal" data-target="#delete_modal"><i class="voyager-trash"></i>Delete</div> ')
                         toastr.success("Added Successfully.");
                         $('#newExpenseModal').modal('toggle');
-                        $('.new-expense')[0].reset()
                     }
                 },
                 error:function(error){
@@ -236,7 +242,7 @@
                             } else if (key == 'amount') {
                                 tbody_row.find("."+key).attr(key, value).text("RM "+value);
                             } else if (key == 'attachment' && value) {
-                                tbody_row.find("."+key).html('<img src="http://127.0.0.1:8000/storage/'+ value +'" style="width:120px">');
+                                tbody_row.find("."+key).html('<img data-toggle="modal" data-target="#imagemodal_4" src="http://127.0.0.1:8000/storage/'+ value +'" style="width:120px; cursor:pointer;">');
                             } else if (key == 'status') {
                                 var status_color = value == 'Pending' ? '#dbad05' : '#1cba03';
                                 tbody_row.find("."+key).attr('style', 'font-weight:bold; color:'+ status_color +';').text(value);
@@ -248,7 +254,6 @@
                         });
                         toastr.success("Update Successfully.");
                         $('#editExpenseModal').modal('toggle');
-                        $('.update-expense')[0].reset()
                     }
                 },
                 error:function(error){
