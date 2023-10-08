@@ -6,6 +6,7 @@ use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\StaticIncomeController;
 use App\Http\Controllers\StaticExpenseController;
 use App\Http\Controllers\DashBoardController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,6 +26,9 @@ Route::get('/', function () {
 Route::group(['prefix' => 'admin'], function () {
     
     Voyager::routes();
+
+    // login
+    Route::post('login', [UserController::class, 'postLogin'])->name('voyager.login');
 
     // dashboard
     Route::get('/', [DashBoardController::class, 'my_index'])->name('voyager.dashboard');
