@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 08, 2023 at 04:41 PM
+-- Generation Time: Oct 10, 2023 at 10:17 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.1.17
 
@@ -237,17 +237,6 @@ CREATE TABLE `expenses` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `expenses`
---
-
-INSERT INTO `expenses` (`id`, `user_id`, `group_id`, `title`, `description`, `amount`, `status`, `attachment`, `credited_at`, `created_at`, `updated_at`) VALUES
-(7, 1, 4, 'Friend Wedding', 'Pulau Pinang', '875.00', 'Complete', 'expense/WuNUydSSdMGva9f1Ame911td92zOkH8NCqQCwPNv.webp', '2023-09-09 01:38:00', '2023-09-12 17:38:49', '2023-09-30 17:39:00'),
-(8, 1, 5, 'Car Loan', NULL, '545.00', 'Complete', NULL, NULL, '2023-10-18 17:51:17', '2023-09-30 17:51:17'),
-(9, 1, 6, 'Movie Ticket', 'GSC', '34.00', 'Complete', NULL, '2023-10-18 17:51:00', '2023-09-30 17:51:55', '2023-09-30 17:51:55'),
-(10, 1, 5, 'House Loan', NULL, '1200.00', 'Complete', NULL, NULL, '2023-10-02 08:52:34', '2023-10-02 08:52:34'),
-(11, 1, 7, 'Restaurant', NULL, '60.00', 'Pending', 'expense/xnhLnZ6Ote0kGr0ktEY8S7YexTlt2q15yDPLBcXP.webp', NULL, '2023-10-02 10:38:08', '2023-10-06 16:26:26');
-
 -- --------------------------------------------------------
 
 --
@@ -321,14 +310,6 @@ CREATE TABLE `incomes` (
   `debited_at` timestamp NULL DEFAULT NULL,
   `attachment` varchar(500) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `incomes`
---
-
-INSERT INTO `incomes` (`id`, `user_id`, `group_id`, `title`, `description`, `amount`, `created_at`, `updated_at`, `debited_at`, `attachment`) VALUES
-(20, 1, 2, 'September Salary', NULL, '5600.00', '2023-09-30 17:34:20', '2023-10-06 17:12:06', '2023-10-29 17:12:00', 'income/Ug86lX3wHQd2cT20HlguJetAgPUAw0xH5mWgTWDo.png'),
-(21, 1, 15, 'September Salary', NULL, '1200.00', '2023-09-30 17:35:27', '2023-10-06 17:11:54', '2023-10-16 17:11:00', 'income/SJ8Oulr02TOy794uEECTcd9a7ZM24dncbLXYM2i7.png');
 
 -- --------------------------------------------------------
 
@@ -784,13 +765,13 @@ CREATE TABLE `settings` (
 INSERT INTO `settings` (`id`, `key`, `display_name`, `value`, `details`, `type`, `order`, `group`) VALUES
 (1, 'site.title', 'Site Title', 'Expense Tracker', '', 'text', 1, 'Site'),
 (2, 'site.description', 'Site Description', 'Budget & Expense Tracking System', '', 'text', 2, 'Site'),
-(3, 'site.logo', 'Site Logo', 'settings\\September2023\\gXRwMRX1al67GGCYQnsD.png', '', 'image', 3, 'Site'),
+(3, 'site.logo', 'Site Logo', 'settings\\icon.png', '', 'image', 3, 'Site'),
 (4, 'site.google_analytics_tracking_id', 'Google Analytics Tracking ID', NULL, '', 'text', 4, 'Site'),
-(5, 'admin.bg_image', 'Admin Background Image', 'settings\\September2023\\g5zsCxLNkN2KXg89xprz.webp', '', 'image', 5, 'Admin'),
+(5, 'admin.bg_image', 'Admin Background Image', 'settings\\background.webp', '', 'image', 5, 'Admin'),
 (6, 'admin.title', 'Admin Title', 'Expense Tracker', '', 'text', 1, 'Admin'),
 (7, 'admin.description', 'Admin Description', 'Budget & Expense Tracking System', '', 'text', 2, 'Admin'),
 (8, 'admin.loader', 'Admin Loader', '', '', 'image', 3, 'Admin'),
-(9, 'admin.icon_image', 'Admin Icon Image', 'settings\\September2023\\P6NUDdz04BrTl9ee2ZmQ.png', '', 'image', 4, 'Admin'),
+(9, 'admin.icon_image', 'Admin Icon Image', 'settings\\October2023\\0k0kAptVu50RlBpd6aEt.png', '', 'image', 4, 'Admin'),
 (10, 'admin.google_analytics_client_id', 'Google Analytics Client ID (used for admin dashboard)', NULL, '', 'text', 1, 'Admin');
 
 -- --------------------------------------------------------
@@ -811,15 +792,6 @@ CREATE TABLE `static_expenses` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `static_expenses`
---
-
-INSERT INTO `static_expenses` (`id`, `user_id`, `group_id`, `title`, `description`, `amount`, `credit_day_per_month`, `created_at`, `updated_at`) VALUES
-(3, 1, 5, 'Car Loan', NULL, '512.00', 4, '2023-09-30 17:36:20', '2023-09-30 17:36:20'),
-(4, 1, 5, 'House Loan', NULL, '1500.00', 3, '2023-09-30 17:36:42', '2023-09-30 17:36:42'),
-(5, 1, 13, 'Hong Leong Insurance', 'Medical Insurance', '160.00', 8, '2023-09-30 17:37:34', '2023-09-30 17:37:34');
-
 -- --------------------------------------------------------
 
 --
@@ -837,15 +809,6 @@ CREATE TABLE `static_incomes` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `static_incomes`
---
-
-INSERT INTO `static_incomes` (`id`, `user_id`, `group_id`, `title`, `description`, `amount`, `debit_day_per_month`, `created_at`, `updated_at`) VALUES
-(7, 1, 2, 'Monthly Salary', 'Auto Create Salary', '5420.00', 1, '2023-09-30 15:22:56', '2023-09-30 15:22:56'),
-(8, 1, 11, 'Insurance Commision', 'Insurance Commision', '670.00', 10, '2023-09-30 15:24:01', '2023-09-30 17:24:33'),
-(10, 1, 15, 'House Rent', 'Subang Jaya House', '1200.00', 5, '2023-09-30 17:27:57', '2023-09-30 17:27:57');
 
 -- --------------------------------------------------------
 
@@ -925,8 +888,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `role_id`, `name`, `email`, `avatar`, `email_verified_at`, `password`, `remember_token`, `settings`, `created_at`, `updated_at`) VALUES
-(1, 1, 'User', 'khoghu@gmail.com', 'users/default.png', NULL, '$2y$10$XY0Hg5DswcNFKTPm8p9areHoQJ.pMvG3.No/nR.TOY7Z2Inyf4R3C', 'N6C0wwj92JgLEpGTVHqUONN1Lv9EbEwJ1l6aj8qrip6igUzJBWBBLFEoFJW8', '{\"locale\":\"en\"}', '2023-09-24 01:02:02', '2023-10-07 03:57:30'),
-(2, 2, 'vikram', 'vikramgopal14@gmail.com', 'users/default.png', NULL, '$2y$10$k.m1E1hla6DQKp7vIQQ9wekpv02FxlJP9YKWftBkA53g..qzWiCLy', NULL, '{\"locale\":\"en\"}', '2023-10-08 07:48:30', '2023-10-08 07:48:30');
+(1, 1, 'User', 'admin@gmail.com', 'users/default.png', NULL, '$2y$10$XY0Hg5DswcNFKTPm8p9areHoQJ.pMvG3.No/nR.TOY7Z2Inyf4R3C', '65uXVfiiA1MRyo5bGGdGdQ7QRvm6po27Njw1MHqHhmI6NbUBhyONU8nrnC7L', '{\"locale\":\"en\"}', '2023-09-24 01:02:02', '2023-10-10 20:07:34');
 
 -- --------------------------------------------------------
 
