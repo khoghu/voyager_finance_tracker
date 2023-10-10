@@ -771,7 +771,7 @@ INSERT INTO `settings` (`id`, `key`, `display_name`, `value`, `details`, `type`,
 (6, 'admin.title', 'Admin Title', 'Expense Tracker', '', 'text', 1, 'Admin'),
 (7, 'admin.description', 'Admin Description', 'Budget & Expense Tracking System', '', 'text', 2, 'Admin'),
 (8, 'admin.loader', 'Admin Loader', '', '', 'image', 3, 'Admin'),
-(9, 'admin.icon_image', 'Admin Icon Image', 'settings\\October2023\\0k0kAptVu50RlBpd6aEt.png', '', 'image', 4, 'Admin'),
+(9, 'admin.icon_image', 'Admin Icon Image', 'settings\icon.png', '', 'image', 4, 'Admin'),
 (10, 'admin.google_analytics_client_id', 'Google Analytics Client ID (used for admin dashboard)', NULL, '', 'text', 1, 'Admin');
 
 -- --------------------------------------------------------
