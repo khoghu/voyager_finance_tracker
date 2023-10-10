@@ -9,13 +9,13 @@
             <div class="form-group form-group-default" id="emailGroup">
                 <label>{{ __('voyager::generic.email') }}</label>
                 <div class="controls">
-                    <input type="email" name="email" id="email" placeholder="{{ __('voyager::generic.email') }}" class="form-control" value="admin@gmail.com" required>
+                    <input type="email" name="email" id="email" placeholder="{{ __('voyager::generic.email') }}" class="form-control" required>
                 </div>
             </div>
             <div class="form-group form-group-default" id="passwordGroup">
                 <label>{{ __('voyager::generic.password') }}</label>
                 <div class="controls">
-                    <input type="password" name="password" placeholder="{{ __('voyager::generic.password') }}" class="form-control" value="password" required>
+                    <input type="password" name="password" placeholder="{{ __('voyager::generic.password') }}" class="form-control" required>
                 </div>
             </div>
             <div style="display:flex; justify-content:space-between;">
@@ -47,19 +47,19 @@
             <div class="form-group form-group-default" id="passwordGroup">
                 <label>Name</label>
                 <div class="controls">
-                    <input type="text" name="name" placeholder="User Name" class="form-control" value="Khoghulan" required>
+                    <input type="text" name="name" placeholder="User Name" class="form-control" required>
                 </div>
             </div>
             <div class="form-group form-group-default" id="nameGroup">
                 <label>{{ __('voyager::generic.email') }}</label>
                 <div class="controls">
-                    <input type="email" name="email" id="email-register" value="khoghukill@gmail.com" placeholder="{{ __('voyager::generic.email') }}" class="form-control" required>
+                    <input type="email" name="email" id="email-register" placeholder="{{ __('voyager::generic.email') }}" class="form-control" required>
                 </div>
             </div>
             <div class="form-group form-group-default" id="passwordGroup">
                 <label>{{ __('voyager::generic.password') }}</label>
                 <div class="controls">
-                    <input type="password" name="password" value="Kho3$prux" placeholder="{{ __('voyager::generic.password') }}" class="form-control" required
+                    <input type="password" name="password" placeholder="{{ __('voyager::generic.password') }}" class="form-control" required
                         pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
                         title="Password must contain at least 1 uppercase letter, 1 lowercase letter, 1 digit, 1 special character, and be at least 8 characters long.">
                 </div>
