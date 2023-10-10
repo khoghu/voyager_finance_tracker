@@ -6,6 +6,7 @@ use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\StaticIncomeController;
 use App\Http\Controllers\StaticExpenseController;
 use App\Http\Controllers\DashBoardController;
+use App\Http\Controllers\VoyagerUserAuth;
 use App\Http\Controllers\UserController;
 
 /*
@@ -28,7 +29,11 @@ Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
 
     // login
-    Route::post('login', [UserController::class, 'postLogin'])->name('voyager.login');
+    Route::post('login', [VoyagerUserAuth::class, 'postLogin'])->name('voyager.login');
+
+    Route::post('register', [UserController::class, 'postRegister'])->name('voyager.register');
+
+    Route::get('verify', [UserController::class, 'verify'])->name('voyager.verify'); 
 
     // dashboard
     Route::get('/', [DashBoardController::class, 'my_index'])->name('voyager.dashboard');

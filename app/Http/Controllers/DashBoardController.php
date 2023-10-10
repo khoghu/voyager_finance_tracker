@@ -57,7 +57,6 @@ class DashBoardController extends \TCG\Voyager\Http\Controllers\VoyagerControlle
         $currentMonthTotalIncome = 'RM '.number_format($currentMonthTotalIncome, 2, '.', '');
 
         $currentMonthTotalExpense = 'RM '.number_format($currentMonthTotalExpense, 2, '.', '');
-
         
         for ($i = 5; $i >= 0; $i--) {
             $month = Carbon::now()->subMonths($i)->format('F');
@@ -90,8 +89,6 @@ class DashBoardController extends \TCG\Voyager\Http\Controllers\VoyagerControlle
                                            ->groupBy('finance_groups.name')
                                            ->get()->toArray();
 
-       
-
         foreach($currentMonthGroupExpenses as $currentMonthGroupExpense){
             $currentMonthGroupExpenseName[] = $currentMonthGroupExpense['name'];
             $currentMonthGroupExpenseCount[] = $currentMonthGroupExpense['count'];
@@ -99,8 +96,6 @@ class DashBoardController extends \TCG\Voyager\Http\Controllers\VoyagerControlle
 
         // Get the 10 most recent records
         $recentActivity = Expense::orderBy("id","DESC")->latest()->take(10)->get();
-
-        
 
         return Voyager::view('voyager.index', compact(
             'menuItem',

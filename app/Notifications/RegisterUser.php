@@ -44,7 +44,7 @@ class RegisterUser extends Notification
 
     public function toMail($notifiable)
     {
-        $url = URL::temporarySignedRoute('verify', now()->addHours(12) ,['id' => $this->token]);
+        $url = URL::temporarySignedRoute('voyager.verify', now()->addHours(24), ['id' => $this->token]);
         return (new MailMessage)
                     ->line('Hi!')
                     ->subject('Verify Account')
